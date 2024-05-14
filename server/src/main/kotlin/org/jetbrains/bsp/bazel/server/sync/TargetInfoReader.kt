@@ -10,7 +10,7 @@ import java.nio.file.Path
 import kotlin.io.path.reader
 
 class TargetInfoReader {
-    fun readTargetMapFromAspectOutputs(files: Set<Path>): Map<String, TargetInfo> {
+    fun readTargetMapFromAspectOutputs(files: Set<Path>): Map<String, List<TargetInfo>> {
         return runBlocking(Dispatchers.Default) {
             files.map { file -> async { readFromFile(file) } }.awaitAll()
         }.groupBy(TargetInfo::getId)
@@ -21,7 +21,7 @@ class TargetInfoReader {
             // entities (TargetInfos) for each target and each ruleset (or language) instead of just
             // entity-per-label. As long as we don't have it, in case of a conflict we just take the entity
             // that contains JvmTargetInfo as currently it's the most important one for us.
-            .mapValues { it.value.find(TargetInfo::hasJvmTargetInfo) ?: it.value.first() }
+            .mapValues { it.value.filter(TargetInfo::hasJvmTargetInfo)  }
     }
 
     private fun readFromFile(file: Path): TargetInfo {

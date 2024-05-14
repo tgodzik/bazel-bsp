@@ -48,13 +48,13 @@ class BazelProjectMapper(
     Measurements.measure(body, description, metricsLogger, bspClientLogger)
 
   fun createProject(
-    targets: Map<String, TargetInfo>,
+    targets: Map<String, List<TargetInfo>>,
     rootTargets: Set<String>,
     allTargetNames: List<String>,
     workspaceContext: WorkspaceContext,
     bazelInfo: BazelInfo
   ): Project {
-    languagePluginsService.prepareSync(targets.values.asSequence())
+    languagePluginsService.prepareSync(targets.values.flatten().asSequence())
     val dependencyGraph = measure("Build dependency tree") {
       DependencyGraph(rootTargets, targets)
     }
@@ -390,9 +390,9 @@ class BazelProjectMapper(
     return Paths.get(lib).fileName.toString().replace("[^0-9a-zA-Z]".toRegex(), "-") + "-" + shaOfPath
   }
 
-  private fun createLibraries(targets: Map<String, TargetInfo>): Map<String, Library> {
-    return targets.mapValues { (targetId, targetInfo) ->
-      createLibrary(targetId, targetInfo)
+  private fun createLibraries(targets: Map<String, List<TargetInfo>>): Map<String, Library> {
+    return targets.filter{ it.value.isNotEmpty() }.mapValues { (targetId, targetInfo) ->
+      createLibrary(targetId, targetInfo.first())
     }
       .filterValues { it.interfaceJars.isNotEmpty() || it.sources.isNotEmpty() || it.outputs.isNotEmpty() }
   }

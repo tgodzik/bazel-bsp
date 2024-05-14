@@ -5,7 +5,7 @@ import org.jetbrains.bsp.bazel.info.BspTargetInfo.TargetInfo
 
 class DependencyGraph(
         private val rootTargets: Set<String> = emptySet(),
-        private val idToTargetInfo: Map<String, TargetInfo> = emptyMap(),
+        private val idToTargetInfo: Map<String, List<TargetInfo>> = emptyMap(),
 ) {
     private val idToDirectDependenciesIds: Map<String, Set<String>>
     private val idToLazyTransitiveDependencies: Map<String, Lazy<Set<TargetInfo>>>
@@ -21,19 +21,19 @@ class DependencyGraph(
     }
 
     private fun createIdToLazyTransitiveDependenciesMap(
-            idToTargetInfo: Map<String, TargetInfo>
+            idToTargetInfo: Map<String, List<TargetInfo>>
     ): Map<String, Lazy<Set<TargetInfo>>> =
             idToTargetInfo.mapValues { (_, targetInfo) ->
                 calculateLazyTransitiveDependenciesForTarget(targetInfo)
             }
 
     private fun calculateLazyTransitiveDependenciesForTarget(
-            targetInfo: TargetInfo
+            targetInfo: List<TargetInfo>
     ): Lazy<Set<TargetInfo>> =
             lazy { calculateTransitiveDependenciesForTarget(targetInfo) }
 
     private fun calculateTransitiveDependenciesForTarget(
-            targetInfo: TargetInfo
+            targetInfo: List<TargetInfo>
     ): Set<TargetInfo> {
         val dependencies = getDependencies(targetInfo)
         val strictlyTransitiveDependencies = calculateStrictlyTransitiveDependencies(dependencies)
@@ -49,7 +49,7 @@ class DependencyGraph(
             }.toSet()
 
     private fun idsToTargetInfo(dependencies: Set<String>): Set<TargetInfo> =
-            dependencies.mapNotNull(idToTargetInfo::get).toSet()
+            dependencies.mapNotNull(idToTargetInfo::get).flatten().toSet()
 
     private fun directDependenciesIds(targetIds: Set<String>) =
             targetIds.flatMap {
@@ -73,14 +73,14 @@ class DependencyGraph(
                     .filter(::isNotARootTarget)
                     .flatMap(::collectTransitiveDependenciesAndAddTarget).toSet()
 
-    private fun getDependencies(target: TargetInfo): Set<String> =
-            target.dependenciesList.map(Dependency::getId).toSet()
+    private fun getDependencies(target: List<TargetInfo>): Set<String> =
+            target.flatMap { it.dependenciesList}.map(Dependency::getId).toSet()
 
     private fun isNotARootTarget(targetId: String): Boolean =
             !rootTargets.contains(targetId)
 
     private fun collectTransitiveDependenciesAndAddTarget(targetId: String): Set<TargetInfo> {
-        val target = idToTargetInfo[targetId]?.let(::setOf).orEmpty()
+        val target = idToTargetInfo[targetId]?.toSet().orEmpty()
         val dependencies = idToLazyTransitiveDependencies[targetId]?.let(::setOf).orEmpty()
                 .map(Lazy<Set<TargetInfo>>::value).flatten().toSet()
         return dependencies + target

@@ -93,7 +93,7 @@ class ProjectResolver(
     )
   }
 
-  private fun formatTargetsIfNeeded(targets: Collection<String>, targetsInfo: Map<String, BspTargetInfo.TargetInfo >): List<String> =
+  private fun formatTargetsIfNeeded(targets: Collection<String>, targetsInfo: Map<String, List<BspTargetInfo.TargetInfo> >): List<String> =
     when (bazelInfo.release.major) {
       // Since bazel 6, the main repository targets are stringified to "@//"-prefixed labels,
       // contrary to "//"-prefixed in older Bazel versions. Unfortunately this does not apply
