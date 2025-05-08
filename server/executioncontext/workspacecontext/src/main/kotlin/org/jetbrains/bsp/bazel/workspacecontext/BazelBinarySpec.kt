@@ -1,6 +1,5 @@
 package org.jetbrains.bsp.bazel.workspacecontext
 
-import com.intellij.util.EnvironmentUtil
 import org.apache.logging.log4j.LogManager
 import org.jetbrains.bazel.commons.utils.OsArch
 import org.jetbrains.bazel.commons.utils.OsFamily
@@ -103,7 +102,10 @@ internal object BazelBinarySpecExtractor : ExecutionContextEntityExtractor<Bazel
       .filterNotNull()
       .firstOrNull()
 
-  private fun splitPath(): List<String> = EnvironmentUtil.getValue("PATH")?.split(File.pathSeparator).orEmpty()
+  private fun splitPath(): List<String> {
+    val path: String? = System.getenv("PATH")
+    return path?.split(File.pathSeparator).orEmpty()
+  }
 
   private fun bazelFile(path: String, executable: String): Path? {
     val file = File(path, calculateExecutableName(executable))

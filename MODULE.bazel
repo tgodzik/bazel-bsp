@@ -21,7 +21,7 @@ register_toolchains(
 # Required by rules_jvm_external since version 6.3
 bazel_dep(name = "rules_license", version = "1.0.0")
 bazel_dep(name = "rules_java", version = "8.8.0")
-bazel_dep(name = "rules_jvm_external", version = "6.6")
+bazel_dep(name = "rules_jvm_external", version = "6.7")
 
 maven = use_extension("@rules_jvm_external//:extensions.bzl", "maven")
 maven.install(
@@ -135,6 +135,15 @@ bazel_dep(name = "protobuf", version = "29.3")
 bazel_dep(name = "rules_cc", version = "0.1.1")
 bazel_dep(name = "rules_python", version = "1.1.0")
 bazel_dep(name = "platforms", version = "0.0.11")
+
+single_version_override(
+    module_name = "grpc-java",
+    patch_strip = 1,
+    patches = [
+        ":third_party/patches/grpc_java_missing_deps.patch",
+    ],
+    version = "1.66.0",
+)
 
 # Needed for codecanvas
 python = use_extension("@rules_python//python/extensions:python.bzl", "python", dev_dependency = True)
