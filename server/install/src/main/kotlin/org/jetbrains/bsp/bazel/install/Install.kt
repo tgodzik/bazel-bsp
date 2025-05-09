@@ -24,7 +24,10 @@ object Install {
   }
 
   private fun createEnvironment(cliOptions: CliOptions) {
-    val environmentCreator = BazelBspEnvironmentCreator(cliOptions.workspaceRootDir)
+    val installationContext = InstallationContextProvider.createInstallationContext(cliOptions)
+    val bspConnectionDetails = BspConnectionDetailsCreator(installationContext, true).create()
+    val environmentCreator = BazelBspEnvironmentCreator(cliOptions.workspaceRootDir, bspConnectionDetails)
+
     environmentCreator.create()
   }
 

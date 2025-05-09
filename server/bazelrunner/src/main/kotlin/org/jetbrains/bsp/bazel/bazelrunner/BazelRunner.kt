@@ -1,6 +1,5 @@
 package org.jetbrains.bsp.bazel.bazelrunner
 
-import com.intellij.execution.configurations.GeneralCommandLine
 import org.apache.logging.log4j.LogManager
 import org.jetbrains.bazel.commons.constants.Constants
 import org.jetbrains.bazel.label.Label
@@ -140,19 +139,19 @@ class BazelRunner(
     val finishCallback = executionDescriptor.finishCallback
     val processArgs = executionDescriptor.command
 
-    var commandLine = GeneralCommandLine(processArgs).withWorkDirectory(workspaceRoot?.toFile())
+    val processBuilder = ProcessBuilder(processArgs)
 
     // Run needs to be handled separately because the resulting process is not run in the sandbox
     if (command is BazelCommand.Run) {
-      command.workingDirectory?.also { commandLine = commandLine.withWorkDirectory(it.toFile()) }
-      commandLine = commandLine.withEnvironment(command.environment)
+      command.workingDirectory?.also { processBuilder.directory(it.toFile()) }
+      processBuilder.environment() += command.environment
       logInvocation(processArgs, command.environment, command.workingDirectory, originId, shouldLogInvocation = shouldLogInvocation)
     } else {
       logInvocation(processArgs, null, null, originId, shouldLogInvocation = shouldLogInvocation)
     }
 
-    val process = commandLine.createProcess()
     val outputLogger = bspClientLogger.takeIf { logProcessOutput }?.copy(originId = originId)
+    val process = processBuilder.start()
 
     return BazelProcess(
       process,
