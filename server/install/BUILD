@@ -1,3 +1,4 @@
+load("//:versions.bzl", "BAZEL_BSP_ARTIFACT_VERSION")
 load("@rules_jvm_external//:kt_defs.bzl", "kt_jvm_export")
 load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_binary", "kt_jvm_library")
 
@@ -26,7 +27,7 @@ kt_jvm_binary(
 
 kt_jvm_export(
     name = "install_export",
-    maven_coordinates = "com.virtuslab:bazel-bsp:3.2.4",
+    maven_coordinates = "com.virtuslab:bazel-bsp:{}".format(BAZEL_BSP_ARTIFACT_VERSION),
     pom_template = "//server/server/src/main/resources:pom.xml",
     tags = [
         "manual",
