@@ -1,6 +1,6 @@
-load("//:versions.bzl", "BAZEL_BSP_ARTIFACT_VERSION")
 load("@rules_jvm_external//:kt_defs.bzl", "kt_jvm_export")
 load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_binary", "kt_jvm_library")
+load("//:versions.bzl", "BAZEL_BSP_ARTIFACT_VERSION")
 
 kt_jvm_library(
     name = "install-lib",
