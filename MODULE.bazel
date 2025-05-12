@@ -26,6 +26,7 @@ bazel_dep(name = "rules_jvm_external", version = "6.7")
 maven = use_extension("@rules_jvm_external//:extensions.bzl", "maven")
 maven.install(
     artifacts = [
+        "com.google.protobuf:protobuf-java:4.29.3",
         "ch.epfl.scala:bsp4j:2.2.0-M2",
         "com.fasterxml.jackson.core:jackson-databind:2.18.2",
         "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.18.2",

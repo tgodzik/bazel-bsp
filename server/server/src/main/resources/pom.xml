@@ -17,19 +17,7 @@
     <url>https://www.jetbrains.com/</url>
 
     <dependencies>
-        {dependencies}
-        <!--
-            protobuf-java dep is here to force newer version in the classpath of .bsp/bazelbsp.json.
-            Otherwise exception is raised 'NoClassDefFoundError: com/google/protobuf/RuntimeVersion$RuntimeDomain'.
-            Probably, this can be replaced with direct, explicit maven.install dependency in MODULE.bazel together
-            with the appropriate runtime_dep entry for kt_jvm_export target.
-        -->
-        <dependency>
-            <groupId>com.google.protobuf</groupId>
-            <artifactId>protobuf-java</artifactId>
-            <version>4.29.3</version>
-            <scope>runtime</scope>
-        </dependency>
+{dependencies}
     </dependencies>
     <developers>
         <developer>
