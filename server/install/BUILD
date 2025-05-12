@@ -38,6 +38,8 @@ kt_jvm_export(
         "//server/commons",
         "//server/install:install-lib",
         "//server/server/src/main/kotlin/org/jetbrains/bsp/bazel/server",
+        # Needed for protobuf runtime version consitency, otherwise NoClassDefFoundError is raised
+        "@maven//:original_com_google_protobuf_protobuf_java_4_29_3",
         # Needed because the installer injects its own classpath as the one to be used by the installed server
         "@server_maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core",
         "@server_maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm",
