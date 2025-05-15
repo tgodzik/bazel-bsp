@@ -98,6 +98,7 @@ object NestedModulesTest : BazelBspTestBaseScenario() {
             "bazelbsp_aspect" to "+_repo_rules+bazelbsp_aspect",
             "local_config_platform" to "local_config_platform",
             "rules_java" to "rules_java+",
+            "rules_python" to "rules_python+",
             "bazel_tools" to "bazel_tools",
             "outer" to "",
             "inner" to "inner+",

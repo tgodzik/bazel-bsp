@@ -1,3 +1,4 @@
-module(name = "allow_manula_targets_sync")
+module(name = "allow_manual_targets_sync")
 
 bazel_dep(name = "rules_java", version = "8.6.2")
+bazel_dep(name = "rules_python", version = "1.0.0")
