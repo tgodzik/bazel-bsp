@@ -1,5 +1,5 @@
-load("@//rules/testing:junit5.bzl", "kt_junit5_test")
 load("@//rules/testing:commons.bzl", "KOTEST_DEPS")
+load("@//rules/testing:junit5.bzl", "kt_junit5_test")
 load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_library")
 
 kt_jvm_library(
@@ -16,15 +16,15 @@ kt_jvm_library(
 # is kt_jvm_library + java_test (which has flaky attr)
 java_test(
     name = "BspProjectMapperTest",
-    main_class = "org.junit.platform.console.ConsoleLauncher",
     args = [
         "--select-package=org.jetbrains.bsp.bazel.server.sync",
     ],
+    flaky = True,
+    main_class = "org.junit.platform.console.ConsoleLauncher",
+    use_testrunner = False,
     runtime_deps = [
         ":BspProjectMapperTestLib",
     ],
-    use_testrunner = False,
-    flaky = True,
 )
 
 kt_junit5_test(
