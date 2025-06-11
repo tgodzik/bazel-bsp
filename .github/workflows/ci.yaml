@@ -9,7 +9,7 @@ jobs:
   integration-tests:
     name: Check formatting, build and test
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         os:
           - ubuntu-latest # x86_64-linux

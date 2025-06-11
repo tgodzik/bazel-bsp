@@ -10,9 +10,7 @@ import ch.epfl.scala.bsp4j.ShowMessageParams
 import ch.epfl.scala.bsp4j.TaskFinishParams
 import ch.epfl.scala.bsp4j.TaskProgressParams
 import ch.epfl.scala.bsp4j.TaskStartParams
-import org.jetbrains.bazel.server.connection.Connection
 import org.jetbrains.bsp.bazel.install.Install
-import org.jetbrains.bsp.bazel.server.benchmark.shutdownTelemetry
 import org.jetbrains.bsp.protocol.JoinedBuildClient
 import org.jetbrains.bsp.protocol.PublishOutputParams
 import java.nio.file.Files
@@ -95,7 +93,6 @@ fun main(args0: Array<String>) {
   proxy.workspaceBuildTargets().get().let { println(it) }
 
   connection.stop()
-  shutdownTelemetry()
 }
 
 class BuildClient : JoinedBuildClient {

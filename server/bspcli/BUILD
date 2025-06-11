@@ -11,7 +11,7 @@ filegroup(
 
 kt_jvm_binary(
     name = "bspcli",
-    srcs = ["src/main/kotlin/org/jetbrains/bsp/cli/Main.kt"],
+    srcs = glob(["src/main/kotlin/org/jetbrains/bsp/cli/*.kt"]),
     jvm_flags = [
         "-Xmx4g",
         "-Dlog4j.configurationFile=classpath:{}".format(LOG4J_CONFIG),
@@ -20,20 +20,18 @@ kt_jvm_binary(
     resources = [":bspcli_resources"],
     visibility = ["//visibility:public"],
     deps = [
-        "//plugin-bazel/src/main/kotlin/org/jetbrains/bazel/server/connection",
+        "//commons/src/main/kotlin/org/jetbrains/bazel/commons/constants",
         "//protocol",
+        "//server/executioncontext/workspacecontext",
         "//server/install/src/main/kotlin/org/jetbrains/bsp/bazel/install",
+        "//server/server/src/main/kotlin/org/jetbrains/bsp/bazel/server",
+        "//server/server/src/main/kotlin/org/jetbrains/bsp/bazel/server/benchmark",
+        "//server/server/src/main/kotlin/org/jetbrains/bsp/bazel/server/bsp/info",
         "@maven//:ch_epfl_scala_bsp4j",
+        "@maven//:com_google_guava_guava",
+        "@maven//:org_eclipse_lsp4j_org_eclipse_lsp4j_jsonrpc",
         "@server_maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core",
         "@server_maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm",
-    ],
-)
-
-kt_jvm_library(
-    name = "intellij-bsp",
-    neverlink = True,
-    exports = [
-        "//plugin-bazel/src:intellij-bsp",
     ],
 )
 

@@ -2,7 +2,6 @@ package org.jetbrains.bsp.bazel.server.sync
 
 import com.google.common.hash.Hashing
 import com.google.devtools.build.lib.view.proto.Deps
-import com.intellij.util.EnvironmentUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -1110,7 +1109,7 @@ class BazelProjectMapper(
   }
 
   private fun collectInheritedEnvs(targetInfo: TargetInfo): Map<String, String> =
-    targetInfo.envInheritList.associateWith { EnvironmentUtil.getValue(it).orEmpty() }
+    targetInfo.envInheritList.associateWith { System.getenv(it).orEmpty() }
 
   private fun removeDotBazelBspTarget(targets: Collection<Label>): Collection<Label> =
     targets.filter {
