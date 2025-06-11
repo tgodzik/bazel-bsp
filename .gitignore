@@ -7,7 +7,6 @@
 bazel-bazel-bsp/
 
 .idea/*
-!.idea/icon.svg
 
 .ijwb
 .intellijPlatform
