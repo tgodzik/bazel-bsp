@@ -1,6 +1,6 @@
-# Contributing to Hirschgarten
+# Contributing to Bazel BSP
 
-We're excited that you're interested in contributing to Hirschgarten!  
+We're excited that you're interested in contributing to Bazel BSP!  
 This document outlines the process for contributing to this project.
 
 ## Code of Conduct
@@ -50,17 +50,7 @@ The CI pipeline will automatically re-run on new commits.
 If some test passes locally but fails on CI and you don't understand the reason -
 ask maintainers for help in the PR comments.
 
-## Reporting Bugs
-
-We use YouTrack for bug tracking. Please report bugs at our [YouTrack project](https://youtrack.jetbrains.com/issues/BAZEL).  
-Before creating a new issue, please check existing issues to avoid duplicates.
-
-## Suggesting Enhancements
-
-We welcome suggestions for improvements and new features.  
-Please use our  [YouTrack project](https://youtrack.jetbrains.com/issues/BAZEL) to submit your ideas, clearly labeling them as feature requests/suggestions.
-
 ## Getting Help
 If you need help with your contribution or have questions about the CI process, feel free to ask questions in comments to your PR.
 
-Thank you for contributing to Hirschgarten!
+Thank you for contributing!
