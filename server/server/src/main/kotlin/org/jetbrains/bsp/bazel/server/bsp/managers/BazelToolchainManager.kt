@@ -8,7 +8,7 @@ import org.jetbrains.bsp.protocol.FeatureFlags
 class BazelToolchainManager(private val bazelRunner: BazelRunner, private val featureFlags: FeatureFlags) {
   fun getToolchain(rulesetLanguage: RulesetLanguage, cancelChecker: CancelChecker): Label? =
     when (rulesetLanguage.language) {
-      Language.Scala -> Label.parse("@io_bazel_rules_scala//scala:toolchain_type")
+      Language.Scala -> Label.parse("@${rulesetLanguage.rulesetName}//scala:toolchain_type")
       Language.Java -> Label.parse("@bazel_tools//tools/jdk:runtime_toolchain_type")
       Language.Kotlin -> Label.parse("@${rulesetLanguage.rulesetName}//kotlin/internal:kt_toolchain_type")
       Language.Rust -> Label.parse("@${rulesetLanguage.rulesetName}//rust:toolchain_type")

@@ -1,0 +1,81 @@
+package org.jetbrains.bsp.bazel
+
+import ch.epfl.scala.bsp4j.SourcesParams
+import ch.epfl.scala.bsp4j.WorkspaceBuildTargetsResult
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.paths.shouldExist
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.maps.shouldContainAll
+import io.kotest.matchers.string.shouldEndWith
+import kotlinx.coroutines.future.await
+import org.jetbrains.bazel.label.Label
+import org.jetbrains.bsp.bazel.base.BazelBspTestBaseScenario
+import org.jetbrains.bsp.bazel.base.BazelBspTestScenarioStep
+import org.jetbrains.bsp.bazel.install.Install
+import java.net.URI
+import kotlin.io.path.Path
+import kotlin.io.path.relativeTo
+import kotlin.io.path.toPath
+import kotlin.time.Duration.Companion.seconds
+
+object RulesScalaBzlmodTest : BazelBspTestBaseScenario() {
+  private val testClient = createBazelClient()
+
+  @JvmStatic
+  fun main(args: Array<String>) = executeScenario()
+
+  override fun installServer() {
+    Install.main(
+      arrayOf(
+        "-d",
+        workspaceDir,
+        "-b",
+        bazelBinary,
+        "-t",
+        "@//...",
+      ),
+    )
+  }
+
+  override fun scenarioSteps(): List<BazelBspTestScenarioStep> =
+    listOf(
+      compareWorkspaceTargetsResults(),
+    )
+
+  override fun expectedWorkspaceBuildTargetsResult(): WorkspaceBuildTargetsResult {
+    error("not needed")
+  }
+
+  private fun compareWorkspaceTargetsResults(): BazelBspTestScenarioStep =
+    BazelBspTestScenarioStep(
+      "compare workspace targets results",
+    ) {
+      testClient.test(60.seconds) { session, _ ->
+        val targetsResult = session.server.workspaceBuildAndGetBuildTargets().await()
+
+        targetsResult.targets.size shouldBe 2
+        targetsResult.targets.map { Label.parse(it.id.uri) } shouldContainExactlyInAnyOrder
+          listOf(
+            Label.parse("@//:lib"),
+            Label.parse("@//:bin"),
+          )
+
+        val sourcesResult =
+          session.server
+            .buildTargetSources(
+              SourcesParams(targetsResult.targets.map { it.id }),
+            ).await()
+
+        sourcesResult.items.size shouldBe 2
+
+        sourcesResult.items
+          .flatMap {
+            it.sources
+          }.map { Path(it.uri.removePrefix("file:")).relativeTo(Path(workspaceDir)).toString() } shouldContainExactlyInAnyOrder
+        listOf(
+            "Main.scala"
+        )
+      }
+    }
+
+}

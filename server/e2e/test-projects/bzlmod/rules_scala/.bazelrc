@@ -1,0 +1,3 @@
+common --enable_bzlmod
+common --incompatible_use_plus_in_repo_names
+build --java_runtime_version=remotejdk_11
