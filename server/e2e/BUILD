@@ -176,10 +176,10 @@ test_suite(
         ":partial_sync_test",
         ":python_project_test",
         ":remote_jdk_test",
+        ":rules_scala_bzlmod_test",
         ":rust_project_test",
         ":sample_repo_test",
         ":server_downloads_bazelisk_test",
-        ":rules_scala_bzlmod_test",
     ],
 )
 

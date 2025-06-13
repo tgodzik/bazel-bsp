@@ -3,19 +3,14 @@ package org.jetbrains.bsp.bazel
 import ch.epfl.scala.bsp4j.SourcesParams
 import ch.epfl.scala.bsp4j.WorkspaceBuildTargetsResult
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
-import io.kotest.matchers.paths.shouldExist
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.maps.shouldContainAll
-import io.kotest.matchers.string.shouldEndWith
 import kotlinx.coroutines.future.await
 import org.jetbrains.bazel.label.Label
 import org.jetbrains.bsp.bazel.base.BazelBspTestBaseScenario
 import org.jetbrains.bsp.bazel.base.BazelBspTestScenarioStep
 import org.jetbrains.bsp.bazel.install.Install
-import java.net.URI
 import kotlin.io.path.Path
 import kotlin.io.path.relativeTo
-import kotlin.io.path.toPath
 import kotlin.time.Duration.Companion.seconds
 
 object RulesScalaBzlmodTest : BazelBspTestBaseScenario() {
@@ -72,10 +67,9 @@ object RulesScalaBzlmodTest : BazelBspTestBaseScenario() {
           .flatMap {
             it.sources
           }.map { Path(it.uri.removePrefix("file:")).relativeTo(Path(workspaceDir)).toString() } shouldContainExactlyInAnyOrder
-        listOf(
-            "Main.scala"
-        )
+          listOf(
+            "Main.scala",
+          )
       }
     }
-
 }

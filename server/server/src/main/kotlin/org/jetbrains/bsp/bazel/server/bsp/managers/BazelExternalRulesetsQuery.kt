@@ -8,9 +8,9 @@ import org.jetbrains.bazel.label.Label
 import org.jetbrains.bsp.bazel.bazelrunner.BazelProcessResult
 import org.jetbrains.bsp.bazel.bazelrunner.BazelRunner
 import org.jetbrains.bsp.bazel.logger.BspClientLogger
-import org.jetbrains.bsp.bazel.server.bzlmod.rootRulesToNeededTransitiveRules
 import org.jetbrains.bsp.bazel.server.bzlmod.BzlmodRepoMapping
 import org.jetbrains.bsp.bazel.server.bzlmod.RepoMapping
+import org.jetbrains.bsp.bazel.server.bzlmod.rootRulesToNeededTransitiveRules
 import org.jetbrains.bsp.bazel.workspacecontext.EnabledRulesSpec
 import org.w3c.dom.Document
 import org.w3c.dom.NodeList
@@ -43,14 +43,16 @@ class BazelExternalRulesetsQueryImpl(
       enabledRules.isNotEmpty() -> BazelEnabledRulesetsQueryImpl(enabledRules).fetchExternalRulesetNames(cancelChecker)
       else ->
         BazelBzlModExternalRulesetsQueryImpl(
-            bazelRunner,
-            isBzlModEnabled,
-            bspClientLogger, repoMapping
-        ).fetchExternalRulesetNames(cancelChecker) + BazelWorkspaceExternalRulesetsQueryImpl(
+          bazelRunner,
+          isBzlModEnabled,
+          bspClientLogger,
+          repoMapping,
+        ).fetchExternalRulesetNames(cancelChecker) +
+          BazelWorkspaceExternalRulesetsQueryImpl(
             bazelRunner,
             isWorkspaceEnabled,
             bspClientLogger,
-        ).fetchExternalRulesetNames(cancelChecker)
+          ).fetchExternalRulesetNames(cancelChecker)
     }
 }
 
@@ -126,9 +128,9 @@ class BazelBzlModExternalRulesetsQueryImpl(
         graph { options.add("--output=json") }
       }
     val apparentRepoNameToCanonicalName =
-        (repoMapping as? BzlmodRepoMapping)?.apparentRepoNameToCanonicalName ?: emptyMap()
+      (repoMapping as? BzlmodRepoMapping)?.apparentRepoNameToCanonicalName ?: emptyMap()
     val canonicalNameToApparentRepoName =
-        apparentRepoNameToCanonicalName.entries.associateBy({it.value}){ it.key}
+      apparentRepoNameToCanonicalName.entries.associateBy({ it.value }) { it.key }
     val bzlmodGraphJson =
       bazelRunner
         .runBazelCommand(command, logProcessOutput = false, serverPidFuture = null)
@@ -154,8 +156,9 @@ class BazelBzlModExternalRulesetsQueryImpl(
           .flatten()
 
       fun toApparentName(canonicalName: String) = canonicalNameToApparentRepoName.get(canonicalName)
-      val deps = (directDeps + indirectDeps)
-          .map { toApparentName("$it~") ?: toApparentName("$it+") ?: it}
+      val deps =
+        (directDeps + indirectDeps)
+          .map { toApparentName("$it~") ?: toApparentName("$it+") ?: it }
           .distinct()
 
       return deps
