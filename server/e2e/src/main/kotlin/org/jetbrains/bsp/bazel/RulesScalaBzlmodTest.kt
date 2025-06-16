@@ -46,7 +46,7 @@ object RulesScalaBzlmodTest : BazelBspTestBaseScenario() {
       "compare workspace targets results",
     ) {
       testClient.test(60.seconds) { session, _ ->
-        val targetsResult = session.server.workspaceBuildAndGetBuildTargets().await()
+        val targetsResult = session.server.workspaceBuildTargets().await()
 
         targetsResult.targets.size shouldBe 2
         targetsResult.targets.map { Label.parse(it.id.uri) } shouldContainExactlyInAnyOrder
