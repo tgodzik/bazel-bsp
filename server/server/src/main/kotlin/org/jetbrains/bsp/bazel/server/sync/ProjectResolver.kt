@@ -56,6 +56,10 @@ class ProjectResolver(
           "Reading project view and creating workspace context",
           workspaceContextProvider::currentWorkspaceContext,
         )
+      val repoMapping =
+        measured("Calculating external repository mapping") {
+          calculateRepoMapping(workspaceContext, bazelRunner, bazelInfo, bspClientLogger)
+        }
 
       val bazelExternalRulesetsQuery =
         BazelExternalRulesetsQueryImpl(
@@ -64,6 +68,7 @@ class ProjectResolver(
           bazelInfo.isWorkspaceEnabled,
           workspaceContext.enabledRules,
           bspClientLogger,
+          repoMapping,
         )
 
       val externalRulesetNames =
@@ -80,11 +85,6 @@ class ProjectResolver(
         measured(
           "Mapping languages to toolchains",
         ) { ruleLanguages.associateWith { bazelToolchainManager.getToolchain(it, cancelChecker) } }
-
-      val repoMapping =
-        measured("Calculating external repository mapping") {
-          calculateRepoMapping(workspaceContext, bazelRunner, bazelInfo, bspClientLogger)
-        }
 
       measured("Realizing language aspect files from templates") {
         bazelBspAspectsManager.generateAspectsFromTemplates(ruleLanguages, workspaceContext, toolchains, bazelInfo.release, repoMapping)
@@ -173,7 +173,7 @@ class ProjectResolver(
             outputGroups = outputGroups,
             shouldSyncManualFlags = workspaceContext.allowManualTargetsSync.value,
             isRustEnabled = featureFlags.isRustSupportEnabled,
-            shouldLogInvocation = false,
+            shouldLogInvocation = true,
           ).also {
             if (it.status == BazelStatus.OOM_ERROR) {
               bspClientLogger.warn(
@@ -223,7 +223,7 @@ class ProjectResolver(
                 outputGroups = outputGroups,
                 shouldSyncManualFlags = workspaceContext.allowManualTargetsSync.value,
                 isRustEnabled = featureFlags.isRustSupportEnabled,
-                shouldLogInvocation = false,
+                shouldLogInvocation = true,
               )
           if (result.isFailure) {
             bspClientLogger.warn("Failed to build $shardName")
