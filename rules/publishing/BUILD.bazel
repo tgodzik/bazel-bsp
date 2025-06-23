@@ -1,0 +1,23 @@
+load("@rules_java//java:defs.bzl", "java_binary")
+load("@rules_jvm_external//:defs.bzl", "artifact")
+
+exports_files(["upload.sh.tpl"])
+
+java_binary(
+    name = "pgp_signer",
+    srcs = [
+        "MavenSigning.java",
+    ],
+    main_class = "com.virtuslab.bazelbsp.rules.publishing.MavenSigning",
+    deps = [
+        artifact(
+            "org.bouncycastle:bcprov-jdk15on",
+            repository_name = "maven",
+        ),
+        artifact(
+            "org.bouncycastle:bcpg-jdk15on",
+            repository_name = "maven",
+        ),
+    ],
+    visibility = ["//visibility:public"],
+)

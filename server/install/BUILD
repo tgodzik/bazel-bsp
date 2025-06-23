@@ -1,6 +1,7 @@
 load("@rules_jvm_external//:kt_defs.bzl", "kt_jvm_export")
 load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_binary", "kt_jvm_library")
 load("//:versions.bzl", "BAZEL_BSP_ARTIFACT_VERSION")
+load("//rules/publishing:publish_sonatype.bzl", "publish_sonatype")
 
 kt_jvm_library(
     name = "install-lib",
@@ -44,4 +45,12 @@ kt_jvm_export(
         "@server_maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core",
         "@server_maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm",
     ],
+)
+
+publish_sonatype(
+    name = "publish",
+    coord = "com.virtuslab:bazel-bsp:{}".format(BAZEL_BSP_ARTIFACT_VERSION),
+    pom = ":install_export-pom",
+    jar = ":install_export-maven-artifact",
+    source = ":install_export-maven-source",
 )
