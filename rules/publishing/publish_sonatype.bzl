@@ -90,6 +90,7 @@ def publish_sonatype(
             "{}_source_sha256".format(name): "{}-{}-sources.jar.sha256".format(coordinates.artifact, coordinates.version),
             "{}_source_sha512".format(name): "{}-{}-sources.jar.sha512".format(coordinates.artifact, coordinates.version),
         },
+        tags = ["manual"],
     )
 
     pkg_zip(
@@ -97,6 +98,7 @@ def publish_sonatype(
         srcs = [
             ":{}_bundle_files".format(name),
         ],
+        tags = ["manual"],
     )
 
     expand_template_rule(
@@ -113,6 +115,7 @@ def publish_sonatype(
             "{SONATYPE_TOKEN}": "$(sonatype_token)",
         },
         template = "//rules/publishing:upload.sh.tpl",
+        tags = ["manual"],
     )
 
     sh_binary(
@@ -122,6 +125,7 @@ def publish_sonatype(
             ":{}_bundle".format(name),
         ],
         srcs = [":{}.sh".format(name)],
+        tags = ["manual"],
     )
 
 def _parse_coord(coord):
@@ -156,6 +160,7 @@ MAVEN_SIGNING_TOSIGN=$(location {}) \
 MAVEN_SIGNING_OUTPUT_PATH=$(location {}) \
 $(location //rules/publishing:pgp_signer)""".format(artifact, out),
         tools = ["//rules/publishing:pgp_signer"],
+        tags = ["manual"],
     )
 
 def _calculate_hashes(
@@ -182,6 +187,7 @@ def _calculate_hashes(
             tools = [
                 type_to_bin[tp],
             ],
+            tags = ["manual"],
         )
         for tp in types
         if tp in type_to_bin
