@@ -5,7 +5,6 @@ build --define=ij_product=intellij-2025.1
 build --java_language_version=17 --java_runtime_version=17
 build --tool_java_language_version=17 --tool_java_runtime_version=17
 
-common --@rules_python//python/config_settings:bootstrap_impl=script
 # Note: Use `common` for options to be applied to all applicable commands
 
 # To update these lines, execute
@@ -22,14 +21,15 @@ query --deleted_packages=server/e2e/test-projects/bzlmod/allow-manual-targets-sy
 # Docs: https://bazel.build/reference/command-line-reference#flag--host_jvm_args
 startup --host_jvm_args=-DBAZEL_TRACK_SOURCE_DIRECTORIES=1
 
+# Use python interpreter directly from rules_python toolchain rather than '/usr/bin/env python'
+common --@rules_python//python/config_settings:bootstrap_impl=script
+
 # Use a static value for `PATH` and does not inherit `LD_LIBRARY_PATH`. Doesn't let environment
 # variables like `PATH` sneak into the build, which can cause massive cache misses when they change.
 # Use `--action_env=ENV_VARIABLE` if you want to inherit specific environment variables from the
 # client, but note that doing so can prevent cross-user caching if a shared cache is used.
 # Docs: https://bazel.build/reference/command-line-reference#flag--incompatible_strict_action_env
 build --incompatible_strict_action_env
-
-common --enable_platform_specific_config=true
 
 # Do not automatically create `__init__.py` files in the runfiles of Python targets. Fixes the wrong
 # default that comes from Google's internal monorepo by using `__init__.py` to delimit a Python
