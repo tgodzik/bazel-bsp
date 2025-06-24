@@ -9,6 +9,7 @@ java_binary(
         "MavenSigning.java",
     ],
     main_class = "com.virtuslab.bazelbsp.rules.publishing.MavenSigning",
+    visibility = ["//visibility:public"],
     deps = [
         artifact(
             "org.bouncycastle:bcprov-jdk15on",
@@ -19,5 +20,4 @@ java_binary(
             repository_name = "maven",
         ),
     ],
-    visibility = ["//visibility:public"],
 )

@@ -49,7 +49,7 @@ public class MavenSigning {
       throw new RuntimeException(e);
     }
   }
-    
+
   /**
    * This method is based on the following Gradle code: <a
    * href="https://cs.android.com/android-studio/gradle/+/master:platforms/software/security/src/main/java/org/gradle/security/internal/pgp/BaseInMemoryPgpSignatoryProvider.java">...</a>
@@ -77,7 +77,7 @@ public class MavenSigning {
     // CI builder should have the key in the environment variable in Base64 format
     try (InputStream in =
         PGPUtil.getDecoderStream(new ByteArrayInputStream(Base64.getDecoder().decode(key)))) {
-        pgpSecretKey = new JcaPGPSecretKeyRing(in).getSecretKey();
+      pgpSecretKey = new JcaPGPSecretKeyRing(in).getSecretKey();
     } catch (Exception e) {
       throw new IOException("Could not read PGP secret key", e);
     }

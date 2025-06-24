@@ -50,7 +50,7 @@ kt_jvm_export(
 publish_sonatype(
     name = "publish",
     coord = "com.virtuslab:bazel-bsp:{}".format(BAZEL_BSP_ARTIFACT_VERSION),
-    pom = ":install_export-pom",
     jar = ":install_export-maven-artifact",
+    pom = ":install_export-pom",
     source = ":install_export-maven-source",
 )
