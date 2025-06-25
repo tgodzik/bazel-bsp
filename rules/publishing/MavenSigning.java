@@ -37,8 +37,8 @@ public class MavenSigning {
 
   public static void main(String[] args) {
     var toSign = Paths.get(System.getenv("MAVEN_SIGNING_TOSIGN"));
-    var pass = System.getenv("MAVEN_SIGNING_PASSWD").strip();
-    var key = System.getenv("MAVEN_SIGNING_KEY").strip();
+    var pass = System.getenv("SONATYPE_SIGNING_KEY_PASSWORD").strip();
+    var key = System.getenv("SONATYPE_SIGNING_KEY").strip();
     var output = Paths.get(System.getenv("MAVEN_SIGNING_OUTPUT_PATH"));
     Path result = null;
     try {

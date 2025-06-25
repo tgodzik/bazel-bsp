@@ -10,7 +10,7 @@ bazel_dep(name = "ape", version = "1.0.1")
 bazel_dep(name = "rules_shell", version = "0.5.0")
 
 cosmos = use_extension("@ape//ape/cosmos:defs.bzl", "ape_cosmos")
-use_repo(cosmos, "curl", "md5sum", "sha1sum", "sha256sum", "sha512sum")
+use_repo(cosmos, "base64", "curl", "echo", "md5sum", "sha1sum", "sha256sum", "sha512sum")
 
 register_toolchains(
     "//:kotlin_toolchain",

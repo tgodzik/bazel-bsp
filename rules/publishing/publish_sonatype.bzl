@@ -101,18 +101,23 @@ def publish_sonatype(
         tags = ["manual"],
     )
 
+    data = [
+        "@curl",
+        "@echo",
+        "@base64",
+        ":{}_bundle".format(name),
+    ]
+
     expand_template_rule(
         name = "{}.sh".format(name),
-        data = [
-            "@curl",
-            ":{}_bundle".format(name),
-        ],
+        data = data,
         out = "{}_upload.sh".format(name),
         is_executable = True,
         substitutions = {
             "{CURL}": "$(rootpath @curl)",
+            "{ECHO}": "$(rootpath @echo)",
+            "{BASE64}": "$(rootpath @base64)",
             "{BUNDLE}": "$(rootpath :{}_bundle)".format(name),
-            "{SONATYPE_TOKEN}": "$(sonatype_token)",
         },
         template = "//rules/publishing:upload.sh.tpl",
         tags = ["manual"],
@@ -120,10 +125,7 @@ def publish_sonatype(
 
     sh_binary(
         name = name,
-        data = [
-            "@curl",
-            ":{}_bundle".format(name),
-        ],
+        data = data,
         srcs = [":{}.sh".format(name)],
         tags = ["manual"],
     )
@@ -154,8 +156,6 @@ def _sign(
         srcs = [artifact],
         outs = [out],
         cmd = """
-MAVEN_SIGNING_KEY=$(signing_key) \
-MAVEN_SIGNING_PASSWD=$(signing_passwd) \
 MAVEN_SIGNING_TOSIGN=$(location {}) \
 MAVEN_SIGNING_OUTPUT_PATH=$(location {}) \
 $(location //rules/publishing:pgp_signer)""".format(artifact, out),
