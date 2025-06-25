@@ -15,10 +15,16 @@ def publish_sonatype(
 
     Invocation example:
     ```
+    # export four env variables:
+    # - SONATYPE_USERNAME: username for the sonatype account
+    # - SONATYPE_PASSWORD: password for the sonatype account
+    # - SONATYPE_SIGNING_KEY: private key used for signing the artifacts
+    # - SONATYPE_SIGNING_KEY_PASSWORD: password for the private key
     bazel run publish_target \
-       --define signing_key=<KEY>\
-       --define signing_passwd=<PASSWD>\
-       --define sonatype_token=<TOKEN>\
+       --action_env=SONATYPE_USERNAME \
+       --action_env=SONATYPE_PASSWORD \
+       --action_env=SONATYPE_SIGNING_KEY \
+       --action_env=SONATYPE_SIGNING_KEY_PASSWORD
     ```
 
     Args:
