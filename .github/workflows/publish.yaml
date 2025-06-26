@@ -21,9 +21,13 @@ jobs:
       - name: Publish package
         run: |
           bazel run \
-            --define 'maven_repo=https://maven.pkg.github.com/virtuslab/bazel-bsp' \
-            //server/install:install_export.publish
+            //server/install:publish \
+            --action_env=SONATYPE_USERNAME \
+            --action_env=SONATYPE_PASSWORD \
+            --action_env=SONATYPE_SIGNING_KEY \
+            --action_env=SONATYPE_SIGNING_KEY_PASSWORD
         env:
-          MAVEN_USER: virtuslab
-          MAVEN_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          SONATYPE_SIGNING_KEY: $${{ secrets.PGP_SECRET }}
+          SONATYPE_SIGNING_KEY_PASSWORD: $${{ secrets.PGP_PASSPHRASE }}

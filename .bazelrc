@@ -21,6 +21,9 @@ query --deleted_packages=server/e2e/test-projects/bzlmod/allow-manual-targets-sy
 # Docs: https://bazel.build/reference/command-line-reference#flag--host_jvm_args
 startup --host_jvm_args=-DBAZEL_TRACK_SOURCE_DIRECTORIES=1
 
+# Use python interpreter directly from rules_python toolchain rather than '/usr/bin/env python'
+common --@rules_python//python/config_settings:bootstrap_impl=script
+
 # Use a static value for `PATH` and does not inherit `LD_LIBRARY_PATH`. Doesn't let environment
 # variables like `PATH` sneak into the build, which can cause massive cache misses when they change.
 # Use `--action_env=ENV_VARIABLE` if you want to inherit specific environment variables from the

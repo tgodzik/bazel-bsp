@@ -5,6 +5,12 @@ module(
 http_jar = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_jar")
 
 bazel_dep(name = "rules_kotlin", version = "2.1.0")
+bazel_dep(name = "rules_pkg", version = "1.1.0")
+bazel_dep(name = "ape", version = "1.0.1")
+bazel_dep(name = "rules_shell", version = "0.5.0")
+
+cosmos = use_extension("@ape//ape/cosmos:defs.bzl", "ape_cosmos")
+use_repo(cosmos, "base64", "curl", "echo", "md5sum", "sha1sum", "sha256sum", "sha512sum")
 
 register_toolchains(
     "//:kotlin_toolchain",
@@ -52,6 +58,9 @@ maven.install(
         "org.junit.platform:junit-platform-suite-engine:1.11.4",
         "org.kodein.di:kodein-di:7.25.0",
         "org.scala-lang:scala-library:2.13.16",
+        # for gpg signing
+        "org.bouncycastle:bcprov-jdk15on:1.68",
+        "org.bouncycastle:bcpg-jdk15on:1.68",
     ],
     fail_if_repin_required = True,
     generate_compat_repositories = True,
