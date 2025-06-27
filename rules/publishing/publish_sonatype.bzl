@@ -1,5 +1,5 @@
 load("@aspect_bazel_lib//lib:expand_template.bzl", "expand_template_rule")
-load("@bazel_skylib//rules:run_binary.bzl", "run_binary")
+load("@aspect_bazel_lib//lib:run_binary.bzl", "run_binary")
 load("@rules_pkg//pkg:mappings.bzl", "pkg_files")
 load("@rules_pkg//pkg/private/zip:zip.bzl", "pkg_zip")
 load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
@@ -157,16 +157,16 @@ def _sign(
     out = "{}.asc".format(name)
     name = "{}_asc".format(name)
 
-    native.genrule(
+    run_binary(
         name = name,
+        tool = "//rules/publishing:pgp_signer",
         srcs = [artifact],
         outs = [out],
-        cmd = """
-MAVEN_SIGNING_TOSIGN=$(location {}) \
-MAVEN_SIGNING_OUTPUT_PATH=$(location {}) \
-$(location //rules/publishing:pgp_signer)""".format(artifact, out),
-        tools = ["//rules/publishing:pgp_signer"],
-        tags = ["manual"],
+        env = {
+            "MAVEN_SIGNING_TOSIGN": "$(location {})".format(artifact),
+            "MAVEN_SIGNING_OUTPUT_PATH": "$(location {})".format(out),
+        },
+        use_default_shell_env = True,
     )
 
 def _calculate_hashes(

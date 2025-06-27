@@ -12,6 +12,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: bazelbuild/setup-bazelisk@v3
+        with:
+          bazelisk-cache: true
+          repository-cache: true
       - name: Mount bazel cache
         uses: actions/cache@v4
         with:
@@ -29,5 +32,5 @@ jobs:
         env:
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
-          SONATYPE_SIGNING_KEY: $${{ secrets.PGP_SECRET }}
-          SONATYPE_SIGNING_KEY_PASSWORD: $${{ secrets.PGP_PASSPHRASE }}
+          SONATYPE_SIGNING_KEY: ${{ secrets.PGP_SECRET }}
+          SONATYPE_SIGNING_KEY_PASSWORD: ${{ secrets.PGP_PASSPHRASE }}
