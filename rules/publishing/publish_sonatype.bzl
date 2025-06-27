@@ -9,7 +9,8 @@ def publish_sonatype(
         coord = None,
         jar = None,
         source = None,
-        pom = None):
+        pom = None,
+        doc = None):
     """Macro for generating a Sonatype's release bundle and running publish action with a
     new Sonatype release API: https://central.sonatype.org/publish/publish-portal-api/#uploading-a-deployment-bundle
 
@@ -42,7 +43,7 @@ def publish_sonatype(
             name = "{}_{}".format(name, suffix),
             artifact = artifact,
         )
-        for artifact, suffix in [(pom, "pom"), (jar, "jar"), (source, "source")]
+        for artifact, suffix in [(pom, "pom"), (jar, "jar"), (source, "source"), (doc, "doc")]
     ]
 
     [
@@ -50,7 +51,7 @@ def publish_sonatype(
             name = "{}_{}".format(name, suffix),
             artifact = artifact,
         )
-        for artifact, suffix in [(pom, "pom"), (jar, "jar"), (source, "source")]
+        for artifact, suffix in [(pom, "pom"), (jar, "jar"), (source, "source"), (doc, "doc")]
     ]
 
     pkg_files(
@@ -69,6 +70,12 @@ def publish_sonatype(
             "{}_jar_sha256".format(name),
             "{}_jar_sha512".format(name),
             "{}_jar_asc".format(name),
+            doc,
+            "{}_doc_md5".format(name),
+            "{}_doc_sha1".format(name),
+            "{}_doc_sha256".format(name),
+            "{}_doc_sha512".format(name),
+            "{}_doc_asc".format(name),
             source,
             "{}_source_md5".format(name),
             "{}_source_sha1".format(name),
@@ -89,6 +96,12 @@ def publish_sonatype(
             "{}_jar_sha1".format(name): "{}-{}.jar.sha1".format(coordinates.artifact, coordinates.version),
             "{}_jar_sha256".format(name): "{}-{}.jar.sha256".format(coordinates.artifact, coordinates.version),
             "{}_jar_sha512".format(name): "{}-{}.jar.sha512".format(coordinates.artifact, coordinates.version),
+            doc: "{}-{}.doc".format(coordinates.artifact, coordinates.version),
+            "{}_doc_asc".format(name): "{}-{}.doc.asc".format(coordinates.artifact, coordinates.version),
+            "{}_doc_md5".format(name): "{}-{}.doc.md5".format(coordinates.artifact, coordinates.version),
+            "{}_doc_sha1".format(name): "{}-{}.doc.sha1".format(coordinates.artifact, coordinates.version),
+            "{}_doc_sha256".format(name): "{}-{}.doc.sha256".format(coordinates.artifact, coordinates.version),
+            "{}_doc_sha512".format(name): "{}-{}.doc.sha512".format(coordinates.artifact, coordinates.version),
             source: "{}-{}-sources.jar".format(coordinates.artifact, coordinates.version),
             "{}_source_asc".format(name): "{}-{}-sources.jar.asc".format(coordinates.artifact, coordinates.version),
             "{}_source_md5".format(name): "{}-{}-sources.jar.md5".format(coordinates.artifact, coordinates.version),
