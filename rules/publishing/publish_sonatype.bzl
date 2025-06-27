@@ -167,6 +167,9 @@ def _sign(
             "MAVEN_SIGNING_OUTPUT_PATH": "$(location {})".format(out),
         },
         use_default_shell_env = True,
+        tags = [
+            "manual",
+        ],
     )
 
 def _calculate_hashes(
