@@ -8,6 +8,7 @@ fi
 SONATYPE_TOKEN=$({ECHO} -n $SONATYPE_USERNAME:$SONATYPE_PASSWORD | {BASE64} -w0)
 
 {CURL} \
+   --fail-with-body \
    --request POST \
    --silent \
    --header 'Authorization: Bearer ${SONATYPE_TOKEN}' \
