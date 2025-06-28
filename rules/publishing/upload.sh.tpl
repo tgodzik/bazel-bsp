@@ -11,6 +11,6 @@ SONATYPE_TOKEN=$({ECHO} -n $SONATYPE_USERNAME:$SONATYPE_PASSWORD | {BASE64} -w0)
    --fail-with-body \
    --request POST \
    --silent \
-   --header 'Authorization: Bearer ${SONATYPE_TOKEN}' \
+   --header "Authorization: Bearer ${SONATYPE_TOKEN}" \
    --form bundle=@{BUNDLE} \
    https://central.sonatype.com/api/v1/publisher/upload?publishingType=AUTOMATIC
