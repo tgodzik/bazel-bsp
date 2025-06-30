@@ -29,7 +29,7 @@ kt_jvm_binary(
 
 kt_jvm_export(
     name = "install_export",
-    maven_coordinates = "com.virtuslab:bazel-bsp:{}".format(BAZEL_BSP_ARTIFACT_VERSION),
+    maven_coordinates = "org.virtuslab:bazel-bsp:{}".format(BAZEL_BSP_ARTIFACT_VERSION),
     pom_template = "//server/server/src/main/resources:pom.xml",
     tags = [
         "manual",
@@ -51,7 +51,7 @@ kt_jvm_export(
 
 publish_sonatype(
     name = "publish",
-    coord = "com.virtuslab:bazel-bsp:{}".format(BAZEL_BSP_ARTIFACT_VERSION),
+    coord = "org.virtuslab:bazel-bsp:{}".format(BAZEL_BSP_ARTIFACT_VERSION),
     doc = ":install_export-docs",
     jar = ":install_export-maven-artifact",
     pom = ":install_export-pom",
