@@ -208,8 +208,15 @@ class BepServer(
     val startParams = TaskStartParams(taskId)
     val target =
       event.id.testResult.label
-        ?.let { Label.parse(it) }
+        ?.let {
+          if (it.isNotEmpty()) {
+            Label.parse(it)
+          } else {
+            target
+          }
+        }
     startParams.eventTime = event.started.startTimeMillis
+    startParams.originId = originId
 
     if (event.started.command == Constants.BAZEL_BUILD_COMMAND) { // todo: why only build?
       if (target != null) {
@@ -240,7 +247,13 @@ class BepServer(
     val taskId = startedEvent
     val target =
       event.id.testResult.label
-        ?.let { Label.parse(it) }
+        ?.let {
+          if (it.isNotEmpty()) {
+            Label.parse(it)
+          } else {
+            target
+          }
+        }
 
     if (taskId == null) {
       LOGGER.warn("No start event id was found. Origin id: {}", originId)
@@ -256,6 +269,7 @@ class BepServer(
 
     val statusCode = BazelStatus.fromExitCode(event.finished.exitCode.code).toBspStatusCode()
     val finishParams = TaskFinishParams(taskId, statusCode)
+    finishParams.originId = originId
     finishParams.eventTime = event.finished.finishTimeMillis
 
     if (target != null) {
