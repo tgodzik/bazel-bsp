@@ -1,7 +1,7 @@
+load("@bazel_bsp_versions//:versions.bzl", "BAZEL_BSP_ARTIFACT_VERSION")
 load("@rules_jvm_external//:defs.bzl", "javadoc")
 load("@rules_jvm_external//:kt_defs.bzl", "kt_jvm_export")
 load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_binary", "kt_jvm_library")
-load("@bazel_bsp_versions//:versions.bzl", "BAZEL_BSP_ARTIFACT_VERSION")
 load("//rules/publishing:publish_sonatype.bzl", "publish_sonatype")
 
 kt_jvm_library(
