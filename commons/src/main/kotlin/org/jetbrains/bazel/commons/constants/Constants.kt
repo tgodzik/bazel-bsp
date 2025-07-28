@@ -2,7 +2,7 @@ package org.jetbrains.bazel.commons.constants
 
 object Constants {
   const val NAME: String = "bazelbsp"
-  const val VERSION: String = "3.2.0"
+  const val VERSION: String = "4.0.1"
   const val BSP_VERSION: String = "2.1.0"
   const val SCALA: String = "scala"
   const val JAVA: String = "java"
