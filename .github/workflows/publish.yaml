@@ -3,11 +3,9 @@ on:
   push:
     tags: ["**"]
 jobs:
-  tests:
-    uses: ./.github/workflows/ci.yaml
   publish:
+    name: Publish Bazel BSP jars
     runs-on: ubuntu-latest
-    needs: [tests]
     steps:
       - uses: actions/checkout@v4
       - uses: bazelbuild/setup-bazelisk@v3
